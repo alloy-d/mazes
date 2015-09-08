@@ -49,26 +49,6 @@
             (flatten [(map string-for-row grid)
                       (string-for-bottom (last grid))])))
 
-
-(defn bad-string-for-row [row]
-  (str/join "\n"
-            [
-             (str/join (flatten [(map (fn [wall]
-                                         (if wall
-                                           "+---"
-                                           "+   "))
-                                      (map :top row))
-                                 "+"]))
-             (str/join (flatten [(map (fn [wall]
-                                         (if wall
-                                           "|   "
-                                           "    "))
-                                      (map :left row))
-                                 (if (:right (last row)) "|" " ")]))]))
-
-(defn bad-string-for-grid [grid]
-  (str/join "\n" (map bad-string-for-row grid)))
-
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
