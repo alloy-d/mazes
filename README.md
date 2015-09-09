@@ -50,5 +50,4 @@ That'll give you something slightly (but only slightly) more impressive:
 
 Copyright © 2015 Adam Lloyd
 
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+Distributed under a BSD-style license. See [LICENSE](LICENSE).
