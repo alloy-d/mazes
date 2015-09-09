@@ -71,6 +71,9 @@
             (flatten [(map string-for-row grid)
                       (string-for-bottom (last grid))])))
 
+(defn print-grid [grid]
+  (println (string-for-grid grid)))
+
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
