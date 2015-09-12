@@ -29,7 +29,7 @@ That'll give you something like this:
 To run the binary tree maze generation algorithm on a 5-by-10 grid:
 
     mazes.core=> (require 'mazes.alg.binary-tree)
-    mazes.core=> (def maze (mazes.alg.binary-tree/binary-tree (make-grid 5 10)))
+    mazes.core=> (def maze (mazes.alg.binary-tree/on (make-grid 5 10)))
     mazes.core=> (mazes.repr.ascii/print-grid maze)
 
 That'll give you something slightly (but only slightly) more impressive:

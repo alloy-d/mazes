@@ -20,5 +20,5 @@
             (link grid loc neighbor1)
             (link grid loc neighbor2)))))
 
-(defn binary-tree [grid & opts]
+(defn on [grid & opts]
   (reduce #(visit-cell %1 %2 opts) grid (locations grid)))
