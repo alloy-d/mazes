@@ -15,6 +15,12 @@
 (defn num-cols [grid]
   (count (first grid)))
 
+(defn locations [grid]
+  (reduce concat
+          (map (fn [r]
+                 (map (fn [c] [r c]) (range (num-cols grid))))
+               (range (num-rows grid)))))
+
 (defn col [loc] (last loc))
 (defn row [loc] (first loc))
 
