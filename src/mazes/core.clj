@@ -24,6 +24,13 @@
 (defn col [loc] (last loc))
 (defn row [loc] (first loc))
 
+;; Returns the opposite side of a given side.
+(defn opposite [side]
+  (get {:top :bottom
+        :bottom :top
+        :right :left
+        :left :right} side))
+
 ;; Returns the loc to the given side of loc.
 (defn loc-to [side loc]
   (cond (= side :top) [(- (row loc) 1) (col loc)]
@@ -49,6 +56,12 @@
     (assoc-in (assoc-in grid loc1
                         (assoc cell1 (connection loc1 loc2) false))
               loc2 (assoc cell2 (connection loc2 loc1) false))))
+
+(defn linked? [grid loc1 loc2]
+  (let [cell1 (get-in grid loc1)]
+    (if-let [shared-side (connection loc1 loc2)]
+      (not (get cell1 shared-side))
+      false)))
 
 (defn contains-loc? [grid loc]
   (let [row (row loc)
