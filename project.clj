@@ -16,7 +16,10 @@
                                   [org.clojure/java.classpath "0.2.0"]]}}
   :cljsbuild {
     :builds [{:source-paths ["src-cljs"]
-              :compiler {:output-to "resources/public/js/main.js"
+              :compiler {:output-dir "resources/public/js/out"
+                         :output-to "resources/public/js/out/main.js"
                          :optimizations :whitespace
-                         :pretty-print true}}]}
+                         :pretty-print true
+                         :source-map "resources/public/js/out/main.js.map"
+                         :source-map-path "js/out"}}]}
   :ring {:handler mazes.web.handler/handler})
