@@ -1,6 +1,6 @@
 (ns mazes.core
   (:require [clojure.string :as str])
-  (:gen-class))
+  #?(:clj  (:gen-class)))
 
 (defrecord Cell [top right bottom left])
 
