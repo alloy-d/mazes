@@ -9,5 +9,4 @@
    [:head
     [:title "Mazes"]
     (include-js "js/main.js")]
-   [:body
-    [:h1 "Mazes and stuff."]]))
+   [:body]))
