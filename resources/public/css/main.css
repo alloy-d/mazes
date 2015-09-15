@@ -1,0 +1,30 @@
+body {
+  background-color: black;
+  color: #66D9EF;
+  font-size: 100%;
+}
+
+pre {
+  /*   font-family: "Consolas", monospace; */
+  font-weight: bold;
+}
+
+.maze table {
+  border-collapse: collapse;
+}
+.maze table td {
+  height: 3em;
+  width: 3em;
+}
+.maze table td.left {
+  border-left: 5px solid #66D9EF;
+}
+.maze table td.right {
+  border-right: 5px solid #66D9EF;
+}
+.maze table td.top {
+  border-top: 5px solid #66D9EF;
+}
+.maze table td.bottom {
+  border-bottom: 5px solid #66D9EF;
+}

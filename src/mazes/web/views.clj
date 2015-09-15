@@ -2,11 +2,13 @@
   (:require
    [hiccup
     [page :refer [html5]]
-    [page :refer [include-js]]]))
+    [page :refer [include-js include-css]]]))
 
 (defn index-page []
   (html5
    [:head
     [:title "Mazes"]
-    (include-js "js/main.js")]
-   [:body]))
+    (include-css "css/main.css")]
+   [:body
+    [:div {:id "maze" :class "maze"} "Generating your maze..."]
+    (include-js "js/out/main.js")]))
