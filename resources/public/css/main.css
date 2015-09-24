@@ -17,14 +17,14 @@ pre {
   width: 3em;
 }
 .maze table td.left {
-  border-left: 5px solid #66D9EF;
+  border-left: 5px solid currentColor;
 }
 .maze table td.right {
-  border-right: 5px solid #66D9EF;
+  border-right: 5px solid currentColor;
 }
 .maze table td.top {
-  border-top: 5px solid #66D9EF;
+  border-top: 5px solid currentColor;
 }
 .maze table td.bottom {
-  border-bottom: 5px solid #66D9EF;
+  border-bottom: 5px solid currentColor;
 }
