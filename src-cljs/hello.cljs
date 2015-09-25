@@ -10,8 +10,8 @@
 
 (def cell-size "2.5em")
 (def border-size "0.6em")
-(def height 49)
-(def width 26)
+(def height 53)
+(def width 30)
 (def base-grid (make-grid height width))
 
 ;; (defn draw-grid []
