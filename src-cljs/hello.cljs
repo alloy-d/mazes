@@ -31,5 +31,5 @@
                                      " + " border-size
                                      ");"])))))
 
-(js/setInterval draw-grid 5000)
+(js/setInterval draw-grid 15000)
 (draw-grid)
