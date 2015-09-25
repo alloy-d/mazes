@@ -28,19 +28,22 @@ pre {
   margin: auto auto;
 }
 .maze table td {
-  height: 1.5em;
+  border-color: currentColor;
+  border-style: none;
+  border-width: 0.6em;
+  height: 2.5em;
   padding: 0;
-  width: 1.5em;
+  width: 2.5em;
 }
 .maze table td.left {
-  border-left: 0.15em solid currentColor;
+  border-left-style: solid;
 }
 .maze table td.right {
-  border-right: 0.15em solid currentColor;
+  border-right-style: solid;
 }
 .maze table td.top {
-  border-top: 0.15em solid currentColor;
+  border-top-style: solid;
 }
 .maze table td.bottom {
-  border-bottom: 0.15em solid currentColor;
+  border-bottom-style: solid;
 }
