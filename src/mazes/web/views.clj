@@ -14,5 +14,11 @@
     [:title "Mazes"]
     (include-css (cache-bust "css/main.css?"))]
    [:body
-    [:div {:id "maze" :class "maze"} "Generating your maze..."]
+    [:div {:id "maze" :class "maze"}
+     [:h1 {:class "loading"}
+      "a-"
+      [:br]
+      [:em "maze"]
+      [:br]
+      "-ing"]]
     (include-js (cache-bust "js/out/main.js"))]))

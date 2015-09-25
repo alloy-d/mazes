@@ -15,6 +15,14 @@ pre {
   top: 0; right: 0; bottom: 0; left: 0;
 }
 
+.maze h1.loading {
+  color: white;
+  font-size: 400%;
+  padding: 2em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
 .maze table {
   border-collapse: collapse;
   margin: auto auto;
