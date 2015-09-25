@@ -8,8 +8,10 @@
    [dommy.core :as dommy :refer-macros [sel sel1]]
    [clojure.string :as str]))
 
-(def height 31)
-(def width 52)
+(def cell-size "2.5em")
+(def border-size "0.6em")
+(def height 49)
+(def width 26)
 (def base-grid (make-grid height width))
 
 ;; (defn draw-grid []
@@ -22,9 +24,11 @@
                        (table/represent (analysis/compute-distances (alg/on base-grid) [(rand-int height) (rand-int width)])))
       (dommy/set-attr! container
                        :style
-                       (str/join "" ["height: calc((1.5em + 0.15em) * "
+                       (str/join "" ["height: calc("
+                                     "(" border-size " + " cell-size ")"
+                                     " * "
                                      height
-                                     " + 0.15em"
+                                     " + " border-size
                                      ");"])))))
 
 (js/setInterval draw-grid 5000)
