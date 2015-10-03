@@ -5,8 +5,10 @@
                  [org.clojure/clojurescript "1.7.48"]
                  [prismatic/dommy "1.1.0"]
                  [compojure "1.1.6"]
-                 [hiccup "1.0.4"]]
+                 [hiccup "1.0.4"]
+                 [javax.servlet/servlet-api "2.5"]]
   :plugins [[lein-cljsbuild "1.1.0"]
+            [lein-figwheel "0.4.0"]
             [lein-ring "0.9.6"]]
   :main ^:skip-aot mazes.core
   :target-path "target/%s"
@@ -15,11 +17,17 @@
                    :dependencies [[org.clojure/tools.namespace "0.2.3"]
                                   [org.clojure/java.classpath "0.2.0"]]}}
   :cljsbuild {
-    :builds [{:source-paths ["src-cljs"]
-              :compiler {:output-dir "resources/public/js/out"
-                         :output-to "resources/public/js/out/main.js"
-                         :optimizations :whitespace
-                         :pretty-print true
-                         :source-map "resources/public/js/out/main.js.map"
-                         :source-map-path "js/out"}}]}
+              :builds [{:id "default"
+                        :source-paths ["src-cljs"]
+                        :figwheel true
+                        :compiler {:main "mazes.web.core"
+                                   :asset-path "js/out"
+                                   :figwheel true
+                                   :output-dir "resources/public/js/out"
+                                   :output-to "resources/public/js/out/main.js"
+                                   :optimizations :none
+                                   :pretty-print true
+                                   :source-map "resources/public/js/out/main.js.map"
+                                   :source-map-path "js/out"}}]}
+  :figwheel {:ring-handler mazes.web.handler/handler}
   :ring {:handler mazes.web.handler/handler})

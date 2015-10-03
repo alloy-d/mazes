@@ -8,6 +8,7 @@
 
 (defroutes main-routes
   (GET "/" [] (index-page))
+  (GET "/eo1" [] (index-page :variant :eo1))
   (route/resources "/")
   (route/not-found "I think you might be thinking of something else."))
 
