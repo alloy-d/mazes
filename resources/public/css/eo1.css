@@ -1,0 +1,49 @@
+body {
+  background-color: black;
+  color: rgba(0, 128, 255, 0.2);
+  font-size: 100%;
+}
+
+pre {
+  /*   font-family: "Consolas", monospace; */
+  font-weight: bold;
+}
+
+.maze {
+  margin: auto auto;
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+}
+
+.maze h1.loading {
+  color: white;
+  font-size: 400%;
+  padding: 2em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.maze table {
+  border-collapse: collapse;
+  margin: auto auto;
+}
+.maze table td {
+  border-color: currentColor;
+  border-style: none;
+  border-width: 0.6em;
+  height: 2.5em;
+  padding: 0;
+  width: 2.5em;
+}
+.maze table td.left {
+  border-left-style: solid;
+}
+.maze table td.right {
+  border-right-style: solid;
+}
+.maze table td.top {
+  border-top-style: solid;
+}
+.maze table td.bottom {
+  border-bottom-style: solid;
+}

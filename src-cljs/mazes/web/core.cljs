@@ -1,4 +1,4 @@
-(ns hello
+(ns mazes.web.core
   (:require
    [mazes.core :refer (make-grid)]
   ;[mazes.repr.ascii :refer (string-for-grid)]
