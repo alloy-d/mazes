@@ -1,6 +1,6 @@
 (ns mazes.core
   (:require [clojure.string :as str])
-  (:gen-class))
+  #?(:clj  (:gen-class)))
 
 (defrecord Cell [top right bottom left])
 
@@ -78,6 +78,10 @@
                 (assoc valid side neighbor)
                 valid)))
           {} [:top :bottom :left :right]))
+
+(defn linked-neighbors [grid loc]
+  (let [all-neighbors (neighbors grid loc)]
+    (filter #(linked? grid loc (second %1)) all-neighbors)))
 
 (defn -main
   "I don't do a whole lot ... yet."
