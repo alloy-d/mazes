@@ -13,8 +13,8 @@ Fire up your REPL:
 
 To print a 10-by-10 grid with no links between any cells:
 
-    mazes.core=> (require 'mazes.repr.ascii)
-    mazes.core=> (mazes.repr.ascii/print-grid (make-grid 3 3))
+    mazes.core=> (require '[mazes.repr.ascii :refer [print-grid]])
+    mazes.core=> (print-grid (make-grid 3 3))
 
 That'll give you something like this:
 
@@ -26,24 +26,23 @@ That'll give you something like this:
     |   |   |   |
     +---+---+---+
 
-To run the binary tree maze generation algorithm on a 5-by-10 grid:
+To generate a maze using Wilson's algorithm on a 5-by-10 grid:
 
-    mazes.core=> (require 'mazes.alg.binary-tree)
-    mazes.core=> (def maze (mazes.alg.binary-tree/on (make-grid 5 10)))
-    mazes.core=> (mazes.repr.ascii/print-grid maze)
+    mazes.core=> (require '[mazes.alg.wilsons :as wilsons])
+    mazes.core=> (print-grid (wilsons/on (make-grid 5 10)))
 
 That'll give you something slightly (but only slightly) more impressive:
 
     +---+---+---+---+---+---+---+---+---+---+
-    |                                       |
-    +   +   +---+   +---+   +---+   +   +   +
-    |   |   |       |       |       |   |   |
-    +---+---+---+   +---+---+---+   +   +   +
-    |               |               |   |   |
-    +---+---+   +   +---+   +---+   +---+   +
-    |           |   |       |       |       |
-    +   +   +---+---+   +   +---+   +   +   +
-    |   |   |           |   |       |   |   |
+    |           |   |   |   |       |       |
+    +---+   +---+   +   +   +---+   +---+   +
+    |   |           |           |           |
+    +   +   +---+---+   +   +---+   +---+   +
+    |       |           |               |   |
+    +   +---+---+   +   +---+   +---+   +---+
+    |               |   |           |   |   |
+    +---+   +---+---+   +---+---+   +   +   +
+    |               |   |           |       |
     +---+---+---+---+---+---+---+---+---+---+
 
 ## License
