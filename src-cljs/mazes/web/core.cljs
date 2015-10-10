@@ -3,7 +3,7 @@
    [mazes.core :refer (make-grid)]
   ;[mazes.repr.ascii :refer (string-for-grid)]
    [mazes.repr.html-table :as table]
-   [mazes.alg.binary-tree :as alg]
+   [mazes.alg.wilsons :as alg]
    [mazes.analysis.dijkstra :as analysis]
    [dommy.core :as dommy :refer-macros [sel sel1]]
    [clojure.string :as str]))
