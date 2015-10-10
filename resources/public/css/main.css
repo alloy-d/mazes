@@ -1,7 +1,15 @@
+html, body {
+  height: 100%;
+}
+
 body {
-  background-color: black;
-  color: rgba(0, 128, 255, 0.2);
+  background-color: white;
+  color: rgba(0, 128, 255);
   font-size: 100%;
+}
+
+#maze, #maze > div {
+  height: 100%;
 }
 
 pre {
