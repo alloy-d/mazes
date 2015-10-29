@@ -1,5 +1,13 @@
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
 html, body {
   height: 100%;
+  margin: 0;
 }
 
 body {
@@ -38,10 +46,10 @@ pre {
 .maze table td {
   border-color: currentColor;
   border-style: none;
-  border-width: 0.6em;
-  height: 2.5em;
+  border-width: 0.1em;
+  height: 20px;
   padding: 0;
-  width: 2.5em;
+  width: 20px;
 }
 .maze table td.left {
   border-left-style: solid;
