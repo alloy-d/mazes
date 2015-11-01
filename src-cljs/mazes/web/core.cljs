@@ -22,7 +22,10 @@
 (def get-maze
   (memoize
    (fn [height width gen-maze]
-     (gen-maze (make-grid height width)))))
+     (let [grid (make-grid height width)]
+       (-> grid
+           gen-maze
+           (analysis/compute-distances [(rand-int height) (rand-int width)]))))))
 
 (defn dumb-maze [data owner]
   (reify
