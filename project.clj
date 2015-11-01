@@ -3,8 +3,10 @@
   :license {:name "BSD"}
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [org.clojure/clojurescript "1.7.48"]
+                 [org.omcljs/om "0.9.0"]
                  [prismatic/dommy "1.1.0"]
                  [compojure "1.1.6"]
+                 [sablono "0.3.6"]
                  [hiccup "1.0.4"]
                  [javax.servlet/servlet-api "2.5"]]
   :plugins [[lein-cljsbuild "1.1.0"]
