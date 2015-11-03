@@ -11,10 +11,10 @@
 (defn- walk
   "Carve a continuous path through the grid by visiting neighboring
   unvisited cells at random for as long as possible."
-  ([grid visitor]
+  ([grid]
    (let [next (rand-entry (maze/locations grid))]
      (walk grid
-           (visit visitor next)
+           (->Visitor #{next})
            next)))
 
   ([grid visitor prev]
@@ -52,4 +52,4 @@
 (defn on
   "Apply the Hunt-and-Kill Algorithm to a grid."
   [grid]
-  (walk grid (->Visitor #{})))
+  (walk grid))
