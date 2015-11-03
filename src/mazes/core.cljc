@@ -83,6 +83,12 @@
   (let [all-neighbors (neighbors grid loc)]
     (filter #(linked? grid loc (second %1)) all-neighbors)))
 
+(defn annotate
+  "Associate extra metadata with a given location."
+  [grid data loc]
+  (let [cell (get-in grid loc)]
+    (assoc-in grid loc (merge cell data))))
+
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
