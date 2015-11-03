@@ -3,7 +3,7 @@
    [mazes.core :as maze :refer (make-grid)]
    [mazes.repr.ascii :refer (string-for-grid)]
    [mazes.repr.html-table :as table]
-   [mazes.alg.sidewinder :as alg]
+   [mazes.alg.hunt-and-kill :as alg]
    [mazes.analysis.dijkstra :as analysis]
    [om.core :as om]
    [om.dom :as dom]
@@ -62,8 +62,8 @@
       {:height nil
        :width nil
        :cell-size default-cell-size
-       :cells-wide nil
-       :cells-high nil})
+       :cells-wide 2
+       :cells-high 2})
 
     om/IDidMount
     (did-mount [this]
