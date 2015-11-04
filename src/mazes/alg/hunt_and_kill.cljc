@@ -19,7 +19,7 @@
 
   ([grid visitor prev]
    (let [unvisited-neighbors (filterv (partial unvisited? visitor)
-                                      (vals (maze/neighbors grid prev)))]
+                                      (maze/neighbors grid prev))]
      (if (seq unvisited-neighbors)
        (let [next (rand-nth unvisited-neighbors)]
          (recur (maze/link grid prev next)
@@ -36,12 +36,11 @@
         unvisited? (complement visited?)]
     (letfn [(target [_ loc]
               (if (and (unvisited? loc)
-                       (some visited? (vals (maze/neighbors grid loc))))
+                       (some visited? (maze/neighbors grid loc)))
                 (reduced loc)
                 nil))]
       (if-let [next (reduce target (maze/locations grid))]
         (let [to-link (->> (maze/neighbors grid next)
-                           vals
                            (filter visited?)
                            rand-entry)]
           (walk (maze/link grid next to-link)
