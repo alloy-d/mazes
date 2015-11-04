@@ -42,4 +42,4 @@
                       (string-for-bottom (last grid))])))
 
 (defn print-grid [grid]
-  (println (string-for-grid grid)))
+  (println (string-for-grid (:grid grid))))
