@@ -12,22 +12,22 @@
       (str/join (flatten [(map draw-cell row) (closer (last row))])))))
 
 (def string-for-top (string-for-part
-                     :top
+                     :north
                      "+---"
                      "+   "
                      (fn [_] "+")))
 
 (def string-for-middle (string-for-part
-                        :left
+                        :west
                         "|   "
                         "    "
                         (fn [cell]
-                          (if (:right cell)
+                          (if (:east cell)
                             "|"
                             " "))))
 
 (def string-for-bottom (string-for-part
-                        :bottom
+                        :south
                         "+---"
                         "+   "
                         (fn [_] "+")))
