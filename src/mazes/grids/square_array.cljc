@@ -41,7 +41,7 @@
   greater than one, which cannot represent a connection
   under the constraints of this grid.
 
-  You should verify that the location you get back make sense."
+  You should verify that the location you get back makes sense."
   [loc1 loc2]
   (mapv - loc2 loc1))
 
