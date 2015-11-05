@@ -7,7 +7,7 @@
   (str/join (flatten ["<td class='"
                       (str/join " " (map name
                                          (filter #(%1 cell)
-                                                 #{:top :right :bottom :left})))
+                                                 #{:north :south :east :west})))
                       "'"
                       ;; FIXME: This might be one of the worst things I've ever done.
                       (when-let [distance (get cell :mazes.analysis.dijkstra/distance)]

@@ -51,15 +51,15 @@ pre {
   padding: 0;
   width: 20px;
 }
-.maze table td.left {
+.maze table td.west {
   border-left-style: solid;
 }
-.maze table td.right {
+.maze table td.east {
   border-right-style: solid;
 }
-.maze table td.top {
+.maze table td.north {
   border-top-style: solid;
 }
-.maze table td.bottom {
+.maze table td.south {
   border-bottom-style: solid;
 }

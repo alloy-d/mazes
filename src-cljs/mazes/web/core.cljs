@@ -1,9 +1,11 @@
 (ns mazes.web.core
   (:require
-   [mazes.core :as maze :refer (make-grid)]
+   [mazes.core :as maze]
+   [mazes.grids.square-array :as grid :refer (make-grid)]
    [mazes.repr.ascii :refer (string-for-grid)]
    [mazes.repr.html-table :as table]
-   [mazes.alg.hunt-and-kill :as alg]
+   [mazes.alg.recursive-backtracker :as rb]
+   [mazes.alg.hunt-and-kill :as hak]
    [mazes.analysis.dijkstra :as analysis]
    [om.core :as om]
    [om.dom :as dom]
@@ -25,7 +27,8 @@
      (let [grid (make-grid height width)]
        (-> grid
            gen-maze
-           (analysis/compute-distances [(rand-int height) (rand-int width)]))))))
+           ;(analysis/compute-distances [(rand-int height) (rand-int width)])
+           )))))
 
 (defn dumb-maze [data owner]
   (reify
@@ -44,7 +47,7 @@
     om/IRender
     (render [this]
       (let [{:keys [grid cell-size]} data
-            cells-high (maze/num-rows grid)
+            cells-high (:rows grid)
             maze-height (* cells-high cell-size)]
         (js/console.log (str "cells high: " cells-high))
         (dom/div #js {:style #js {:height "100%"}
@@ -53,7 +56,7 @@
           #js {:style #js {:height maze-height}
                :className "maze"
                :dangerouslySetInnerHTML
-               #js {:__html (table/represent grid)}}))))))
+               #js {:__html (table/represent (:grid grid))}}))))))
 
 (defn maze-world [data owner]
   (reify
@@ -94,7 +97,7 @@
 
     om/IRenderState
     (render-state [this {:keys [:height :width :cell-size :cells-high :cells-wide]}]
-      (let [maze (get-maze cells-high cells-wide alg/on)]
+      (let [maze (get-maze cells-high cells-wide rb/on)]
         (om/build dumb-maze {:grid maze :cell-size cell-size})))))
 
 (om/root maze-world {}
