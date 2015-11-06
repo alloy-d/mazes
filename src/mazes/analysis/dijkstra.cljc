@@ -4,14 +4,13 @@
 (defn distance [grid loc]
   (m/annotation grid loc ::distance))
 
-(defn- visited? [grid loc]
-  ((comp not nil?) (distance grid loc)))
+(def ^:private unvisited? (comp nil? distance))
 
 (defn- update-distance [grid loc distance]
   (m/annotate grid loc {::distance distance}))
 
 (defn- unvisited-links [grid loc]
-  (filter #(and (not (visited? grid %))
+  (filter #(and (unvisited? grid %)
                 (m/linked? grid loc %))
           (m/neighbors grid loc)))
 
