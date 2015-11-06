@@ -77,7 +77,16 @@
               new-grid (-> grid
                            (assoc-in loc1 (assoc fcell fside false))
                            (assoc-in loc2 (assoc bcell bside false)))]
-          (SquareArrayGrid. rows cols new-grid))))))
+          (SquareArrayGrid. rows cols new-grid)))))
+
+  maze/PAnnotateCells
+  (annotate [_ loc data]
+    (let [cell (get-in grid loc)]
+      (SquareArrayGrid. rows cols (assoc-in grid loc (merge cell data)))))
+  (annotation [_ loc key]
+    (get-in grid (conj loc key)))
+  (annotations [_ loc key]
+    (get-in grid loc)))
 
 (defn make-grid [rows cols]
   (letfn [(make-row [_]
