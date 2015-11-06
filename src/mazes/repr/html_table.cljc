@@ -12,7 +12,7 @@
                       ;; FIXME: This might be one of the worst things I've ever done.
                       (when-let [distance (get cell :mazes.analysis.dijkstra/distance)]
                         (str/join "" ["style='background-color: rgb(0,0,"
-                                      (max 0 (- 255 (int (* 2 distance))))
+                                      (max 0 (- 255 (int (/ distance 2))))
                                       ");'"]))
                       "/>"])))
 

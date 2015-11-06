@@ -27,7 +27,7 @@
      (let [grid (make-grid height width)]
        (-> grid
            gen-maze
-           ;(analysis/compute-distances [(rand-int height) (rand-int width)])
+           (analysis/compute-distances [(rand-int height) (rand-int width)])
            )))))
 
 (defn dumb-maze [data owner]
