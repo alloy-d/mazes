@@ -65,8 +65,8 @@
       {:height nil
        :width nil
        :cell-size default-cell-size
-       :cells-wide 2
-       :cells-high 2})
+       :cells-wide nil
+       :cells-high nil})
 
     om/IDidMount
     (did-mount [this]
@@ -97,8 +97,10 @@
 
     om/IRenderState
     (render-state [this {:keys [:height :width :cell-size :cells-high :cells-wide]}]
-      (let [maze (get-maze cells-high cells-wide rb/on)]
-        (om/build dumb-maze {:grid maze :cell-size cell-size})))))
+      (if (and cells-high cells-wide)
+        (let [maze (get-maze cells-high cells-wide rb/on)]
+          (om/build dumb-maze {:grid maze :cell-size cell-size}))
+        (html [:div])))))
 
 (om/root maze-world {}
          {:target (sel1 "#maze")})
