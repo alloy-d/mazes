@@ -47,7 +47,7 @@
     om/IRender
     (render [this]
       (let [{:keys [grid cell-size]} data
-            cells-high (:rows grid)
+            cells-high (maze/rows grid)
             maze-height (* cells-high cell-size)]
         (js/console.log (str "cells high: " cells-high))
         (dom/div #js {:style #js {:height "100%"}
@@ -56,7 +56,7 @@
           #js {:style #js {:height maze-height}
                :className "maze"
                :dangerouslySetInnerHTML
-               #js {:__html (table/represent (:grid grid))}}))))))
+               #js {:__html (table/represent grid)}}))))))
 
 (defn maze-world [data owner]
   (reify
