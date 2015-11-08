@@ -29,8 +29,3 @@
   "Methods and information specific to grids with square cells."
   (rows [this] "Returns the number of rows in this grid.")
   (cols [this] "Returns the number of columns in this grid."))
-
-(defn -main
-  "I don't do a whole lot ... yet."
-  [& args]
-  (println "Hello, World!"))
