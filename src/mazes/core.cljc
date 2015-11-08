@@ -20,6 +20,10 @@
   (annotation [this loc key] "Returns the annotation for key for a given loc.")
   (annotations [this loc] "Returns (as a map) all annotations for a given loc."))
 
+(defprotocol PSquareGrid
+  "Methods and information specific to grids with square cells."
+  (rows [this] "Returns the number of rows in this grid.")
+  (cols [this] "Returns the number of columns in this grid."))
 
 (defn -main
   "I don't do a whole lot ... yet."

@@ -80,6 +80,10 @@
                            (assoc-in loc2 (assoc bcell bside false)))]
           (SquareArrayGrid. rows cols new-grid)))))
 
+  maze/PSquareGrid
+  (rows [_] rows)
+  (cols [_] cols)
+
   maze/PAnnotateCells
   (annotate [_ loc data]
     (let [cell (get-in grid loc)]
