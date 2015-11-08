@@ -1,5 +1,5 @@
 (ns mazes.grids.mask
-  (:require [mazes.core :as maze :refer (locations neighbors link linked? annotate annotation annotations rows cols)]
+  (:require [mazes.core :as maze :refer (locations neighbors link linked? annotate annotation annotations rows cols in-grid?)]
             [mazes.util.representable :as repr]))
 
 (defprotocol PMasksGrid
@@ -34,6 +34,12 @@
     (MaskedGrid. (link grid loc1 loc2) masked-locs))
   (linked? [_ loc1 loc2]
     (linked? grid loc1 loc2))
+
+  maze/PBoundedGrid
+  (in-grid? [this loc]
+    (if (masked? this loc)
+      false
+      (in-grid? grid)))
 
   maze/PAnnotateCells
   (annotate [_ loc data]

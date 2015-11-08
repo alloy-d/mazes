@@ -13,6 +13,11 @@
   (link [this loc1 loc2] "Links two cells.")
   (linked? [this loc1 loc2] "Checks if two cells are linked."))
 
+(defprotocol PBoundedGrid
+  "Functionality around dealing with grid boundaries."
+
+  (in-grid? [this loc] "Returns true if a loc is within the grid."))
+
 (defprotocol PAnnotateCells
   "Allows annotating cells with extra data."
 

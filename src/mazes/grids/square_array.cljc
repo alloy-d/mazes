@@ -2,12 +2,6 @@
   (:require [mazes.core :as maze]
             [mazes.util.representable :as repr]))
 
-(defn- in-bounds? [grid-rows grid-cols loc]
-  (let [row (first loc)
-        col (last loc)]
-    (and (< -1 row grid-rows)
-         (< -1 col grid-cols))))
-
 (def north [-1 0])
 (def south [+1 0])
 (def east  [0 +1])
@@ -56,9 +50,9 @@
                   (map (partial conj [r]) (range cols)))
                 (range rows))))
 
-  (neighbors [_ loc]
+  (neighbors [this loc]
     (let [locate (map (partial mapv + loc))
-          constrain (filter (partial in-bounds? rows cols))]
+          constrain (filter (partial maze/in-grid? this))]
       (transduce (comp locate constrain)
                  conj
                  directions)))
@@ -83,6 +77,11 @@
   maze/PSquareGrid
   (rows [_] rows)
   (cols [_] cols)
+
+  maze/PBoundedGrid
+  (in-grid? [_ [row col]]
+    (and (< -1 row rows)
+         (< -1 col cols)))
 
   maze/PAnnotateCells
   (annotate [_ loc data]
