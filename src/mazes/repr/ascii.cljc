@@ -1,5 +1,6 @@
 (ns mazes.repr.ascii
   (:require [mazes.core]
+            [mazes.util.representable :as repr]
             [clojure.string :as str]))
 
 (defn string-for-part [has-wall? wall-glyph passage-glyph closer]
@@ -37,9 +38,10 @@
                   (string-for-middle row)]))
 
 (defn string-for-grid [grid]
+  {:pre (satisfies? repr/Vector2D grid)}
   (str/join "\n"
             (flatten [(map string-for-row grid)
                       (string-for-bottom (last grid))])))
 
 (defn print-grid [grid]
-  (println (string-for-grid (:grid grid))))
+  (println (string-for-grid (repr/->2d-vector grid))))
