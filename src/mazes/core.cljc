@@ -29,3 +29,11 @@
   "Methods and information specific to grids with square cells."
   (rows [this] "Returns the number of rows in this grid.")
   (cols [this] "Returns the number of columns in this grid."))
+
+(defn loc+
+  "Takes a location and an offset, and returns the result of
+  applying the offset to the location."
+  [loc offset]
+  {:pre (= (count loc) (count offset))}
+
+  (mapv + loc offset))
