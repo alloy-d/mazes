@@ -1,5 +1,6 @@
 (ns mazes.grids.square-array
-  (:require [mazes.core :as maze]))
+  (:require [mazes.core :as maze]
+            [mazes.util.representable :as repr]))
 
 (defn- in-bounds? [grid-rows grid-cols loc]
   (let [row (first loc)
@@ -85,8 +86,11 @@
       (SquareArrayGrid. rows cols (assoc-in grid loc (merge cell data)))))
   (annotation [_ loc key]
     (get-in grid (conj loc key)))
-  (annotations [_ loc key]
-    (get-in grid loc)))
+  (annotations [_ loc]
+    (get-in grid loc))
+
+  repr/Vector2D
+  (->2d-vector [_] grid))
 
 (defn make-grid [rows cols]
   (letfn [(make-row [_]
