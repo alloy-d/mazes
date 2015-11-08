@@ -3,7 +3,7 @@
 
 (defn visit [grid loc prev-loc unvisited]
   (if (seq unvisited)
-    (let [next-loc (rand-nth (vals (maze/neighbors grid loc)))]
+    (let [next-loc (rand-nth (maze/neighbors grid loc))]
       (if (contains? unvisited loc)
         (let [grid (if prev-loc
                      (maze/link grid loc prev-loc)
