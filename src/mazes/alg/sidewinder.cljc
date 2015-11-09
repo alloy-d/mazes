@@ -1,36 +1,40 @@
 (ns mazes.alg.sidewinder
-  (:require [mazes.core :as maze]))
+  (:require [mazes.core :as maze :refer (in-grid? link linked? loc+ locations)]
+            [mazes.grids.square-array :as rect]))
+
+(defn- opposite [offset] (mapv - offset))
 
 (defn- get-run [grid run side]
-  (let [neighbor (maze/loc-to (maze/opposite side) (first run))]
-    (if (and (maze/contains-loc? grid neighbor)
-             (maze/linked? grid (first run) neighbor))
-      (get-run grid (cons neighbor run) side)
+  (let [neighbor (loc+ (last run) (opposite side))]
+    (if (and (in-grid? grid neighbor)
+             (linked? grid (last run) neighbor))
+      (get-run grid (conj run neighbor) side)
       run)))
 
 (defn- close-run [grid run side]
   (let [loc-to-link (rand-nth run)]
-    (maze/link grid loc-to-link (maze/loc-to side loc-to-link))))
+    (link grid loc-to-link (loc+ loc-to-link side))))
 
-(defn- visit-cell [grid loc {:keys [side1 side2 ratio]
-                             :or {side1 :right side2 :top ratio 0.5}}]
-  (let [adjoining (maze/neighbors grid loc)
-        neighbor1 (get adjoining side1)
-        neighbor2 (get adjoining side2)]
-    (cond (and (nil? neighbor1)
-               (nil? neighbor2))
+(defn- visit-cell [grid loc {:keys [sides ratio]
+                             :or {sides [rect/east rect/north] ratio 0.5}}]
+  {:pre (= (count sides) 2)}
+
+  (let [choices (transduce (comp (map (partial loc+ loc))
+                                 (map #(if (in-grid? grid %1) %1 nil)))
+                           conj sides)]
+    (cond (every? nil? choices)
           grid
 
-          (nil? neighbor1)
-          (close-run grid (get-run grid [loc] side1) side2)
+          (nil? (first choices))
+          (close-run grid (get-run grid [loc] (first sides)) (last sides))
 
-          (nil? neighbor2)
-          (maze/link grid loc neighbor1)
+          (nil? (second choices))
+          (link grid loc (first choices))
 
           :else
           (if (> ratio (rand))
-            (maze/link grid loc neighbor1)
-            (close-run grid (get-run grid [loc] side1) side2)))))
+            (link grid loc (first choices))
+            (close-run grid (get-run grid [loc] (first sides)) (last sides))))))
 
 (defn on [grid & opts]
   (reduce #(visit-cell %1 %2 opts) grid (maze/locations grid)))
