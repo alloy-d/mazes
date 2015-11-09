@@ -1,6 +1,6 @@
 (ns mazes.repr.html-table
   (:require [mazes.core]
-            [mazes.util.representable :refer (->2d-vector)]
+            [mazes.util.representable :as repr :refer (->2d-vector)]
             [mazes.analysis.dijkstra :as analysis]
             [clojure.string :as str]))
 
@@ -30,5 +30,5 @@
                       "</tbody></table>"])))
 
 (defn represent [grid]
-  {:pre (satisfies? mazes.util.representable/Vector2D grid)}
+  {:pre [(not (nil? grid)) (satisfies? repr/Vector2D grid)]}
   (represent-grid (->2d-vector grid)))
