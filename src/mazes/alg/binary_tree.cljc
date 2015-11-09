@@ -1,24 +1,24 @@
 (ns mazes.alg.binary-tree
-  (:require [mazes.core :as maze]))
+  (:require [mazes.core :as maze :refer (in-grid? link loc+ locations)]
+            [mazes.grids.square-array :as rect]))
 
-(defn- visit-cell [grid loc {:keys [side1 side2 ratio] :or {side1 :right side2 :top ratio 0.5}}]
-  (let [adjoining (maze/neighbors grid loc)
-        neighbor1 (get adjoining side1)
-        neighbor2 (get adjoining side2)]
-    (cond (and (nil? neighbor1)
-               (nil? neighbor2))
+(defn- visit-cell [grid loc {:keys [choices ratio]
+                             :or {choices [rect/north rect/east] ratio 0.5}}]
+  {:pre (= 2 (count choices))}
+
+  (let [choices (transduce (comp (map (partial loc+ loc))
+                                 (filter (partial in-grid? grid)))
+                           conj choices)]
+    (cond (= 0 (count choices))
           grid
 
-          (nil? neighbor1)
-          (maze/link grid loc neighbor2)
-
-          (nil? neighbor2)
-          (maze/link grid loc neighbor1)
+          (= 1 (count choices))
+          (link grid loc (first choices))
 
           :else
           (if (> ratio (rand))
-            (maze/link grid loc neighbor1)
-            (maze/link grid loc neighbor2)))))
+            (link grid loc (first choices))
+            (link grid loc (last choices))))))
 
 (defn on [grid & opts]
-  (reduce #(visit-cell %1 %2 opts) grid (maze/locations grid)))
+  (reduce #(visit-cell %1 %2 opts) grid (locations grid)))
