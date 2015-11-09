@@ -39,7 +39,7 @@
   (in-grid? [this loc]
     (if (masked? this loc)
       false
-      (in-grid? grid)))
+      (in-grid? grid loc)))
 
   maze/PAnnotateCells
   (annotate [_ loc data]
