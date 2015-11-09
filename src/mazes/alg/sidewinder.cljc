@@ -12,8 +12,13 @@
       run)))
 
 (defn- close-run [grid run side]
-  (let [loc-to-link (rand-nth run)]
-    (link grid loc-to-link (loc+ loc-to-link side))))
+  (let [linkable (transduce (comp (map (partial loc+ side))
+                                  (filter (partial in-grid? grid)))
+                            conj run)]
+    (if (seq linkable)
+      (let [to-link (rand-nth linkable)]
+        (link grid to-link (loc+ to-link (opposite side))))
+      grid)))
 
 (defn- visit-cell [grid loc {:keys [sides ratio]
                              :or {sides [rect/east rect/north] ratio 0.5}}]
