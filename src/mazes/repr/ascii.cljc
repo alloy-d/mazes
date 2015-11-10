@@ -1,5 +1,6 @@
 (ns mazes.repr.ascii
   (:require [mazes.core]
+            [mazes.util.representable :as repr]
             [clojure.string :as str]))
 
 (defn string-for-part [has-wall? wall-glyph passage-glyph closer]
@@ -12,22 +13,22 @@
       (str/join (flatten [(map draw-cell row) (closer (last row))])))))
 
 (def string-for-top (string-for-part
-                     :top
+                     :north
                      "+---"
                      "+   "
                      (fn [_] "+")))
 
 (def string-for-middle (string-for-part
-                        :left
+                        :west
                         "|   "
                         "    "
                         (fn [cell]
-                          (if (:right cell)
+                          (if (:east cell)
                             "|"
                             " "))))
 
 (def string-for-bottom (string-for-part
-                        :bottom
+                        :south
                         "+---"
                         "+   "
                         (fn [_] "+")))
@@ -37,9 +38,10 @@
                   (string-for-middle row)]))
 
 (defn string-for-grid [grid]
+  {:pre (satisfies? repr/Vector2D grid)}
   (str/join "\n"
             (flatten [(map string-for-row grid)
                       (string-for-bottom (last grid))])))
 
 (defn print-grid [grid]
-  (println (string-for-grid grid)))
+  (println (string-for-grid (repr/->2d-vector grid))))

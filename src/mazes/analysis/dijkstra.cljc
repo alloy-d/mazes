@@ -2,24 +2,35 @@
   (:require [mazes.core :as m]))
 
 (defn distance [grid loc]
-  (let [cell (get-in grid loc)]
-    (get cell ::distance)))
+  (m/annotation grid loc ::distance))
 
-(defn- visit [grid locs next-locs]
-  (letfn [(update-distance [grid loc dist]
-            (let [cell (get-in grid loc)]
-              (assoc-in grid loc (assoc cell ::distance dist))))]
-    (if (seq locs)
-      (let [linked (map second (m/linked-neighbors grid (first locs)))
-            unvisited (filter #(nil? (distance grid %1)) linked)
-            current-distance (distance grid (first locs))
-            updated-grid (reduce #(update-distance %1 %2 (+ 1 current-distance)) grid unvisited)]
-        (recur updated-grid (rest locs) (concat next-locs unvisited)))
-      (if (seq next-locs)
-        (recur grid next-locs [])
-        grid))))
+(def ^:private unvisited? (comp nil? distance))
+
+(defn- update-distance [grid loc distance]
+  (m/annotate grid loc {::distance distance}))
+
+(defn- unvisited-links [grid loc]
+  (filter #(and (unvisited? grid %)
+                (m/linked? grid loc %))
+          (m/neighbors grid loc)))
+
+(defn- visit [grid [current & remaining] next-locs]
+  (cond
+    current
+    (let [next-distance (+ 1 (distance grid current))
+          to-visit (unvisited-links grid current)
+          updated-grid (reduce #(update-distance %1 %2 next-distance)
+                               grid
+                               to-visit)]
+      (recur updated-grid remaining (concat next-locs to-visit)))
+
+    (seq next-locs)
+    (recur grid next-locs [])
+
+    :else
+    grid))
 
 (defn compute-distances [grid root-loc]
-  (let [root (assoc (get-in grid root-loc) ::distance 0)
-        grid (assoc-in grid root-loc root)]
-    (visit grid [root-loc] [])))
+  (visit (update-distance grid root-loc 0)
+         [root-loc]
+         '()))
