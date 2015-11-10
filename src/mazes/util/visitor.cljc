@@ -51,12 +51,13 @@
 ;; On a "fresh" grid, an Ununvisitor should be initialized
 ;; with the set of *all* locations in the grid, signifying
 ;; that none have yet been visited.
-(defrecord Ununvisitor [unvisited]
+(defrecord Ununvisitor [all-locs unvisited]
   PVisit
   (visit [_ loc]
-    (Ununvisitor. (disj unvisited loc)))
+    (Ununvisitor. all-locs (disj unvisited loc)))
   (visited? [this loc]
-    (not (unvisited? this loc)))
+    (and (contains? all-locs loc)
+         (not (unvisited? this loc))))
 
   PTrackUnvisited
   (unvisited? [_ loc]
@@ -65,3 +66,7 @@
   PListUnvisited
   (unvisited [_] unvisited)
   (count-unvisited [_] (count unvisited)))
+
+(defn make-ununvisitor [grid]
+  (let [locs (set (maze/locations grid))]
+    (->Ununvisitor locs locs)))
