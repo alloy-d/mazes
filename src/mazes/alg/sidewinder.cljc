@@ -43,3 +43,13 @@
 
 (defn on [grid & opts]
   (reduce #(visit-cell %1 %2 opts) grid (maze/locations grid)))
+
+(defn- stepseq [grid remaining-locs opts]
+  (lazy-seq
+   (if (seq remaining-locs)
+     (let [step (visit-cell grid (first remaining-locs) opts)]
+       (cons step (stepseq step (rest remaining-locs) opts)))
+     '())))
+
+(defn stepwise [grid & opts]
+  (stepseq grid (locations grid) opts))
