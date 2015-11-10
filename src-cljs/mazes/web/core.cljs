@@ -1,10 +1,13 @@
 (ns mazes.web.core
   (:require
    [mazes.core :as maze]
-   [mazes.grids.square-array :as grid :refer (make-grid)]
+   [mazes.grids.rectangular :as grid :refer (make-grid)]
    [mazes.repr.ascii :refer (string-for-grid)]
    [mazes.repr.html-table :as table]
+   [mazes.alg.aldous-broder :as ab]
+   [mazes.alg.binary-tree :as bt]
    [mazes.alg.recursive-backtracker :as rb]
+   [mazes.alg.sidewinder :as sidewinder]
    [mazes.alg.hunt-and-kill :as hak]
    [mazes.analysis.dijkstra :as analysis]
    [om.core :as om]
