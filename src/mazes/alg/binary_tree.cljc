@@ -1,6 +1,6 @@
 (ns mazes.alg.binary-tree
   (:require [mazes.core :as maze :refer (in-grid? link loc+ locations)]
-            [mazes.grids.square-array :as rect]))
+            [mazes.grids.rectangular :as rect]))
 
 (defn- visit-cell [grid loc {:keys [choices ratio]
                              :or {choices [rect/north rect/east] ratio 0.5}}]

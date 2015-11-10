@@ -1,4 +1,4 @@
-(ns mazes.grids.square-array
+(ns mazes.grids.rectangular
   (:require [mazes.core :as maze]
             [mazes.util.representable :as repr]))
 
@@ -40,9 +40,9 @@
   [loc1 loc2]
   (mapv - loc2 loc1))
 
-(defrecord SquareArrayCell [north south east west])
+(defrecord RectangularCell [north south east west])
 
-(defrecord SquareArrayGrid [rows cols grid]
+(defrecord RectangularGrid [rows cols grid]
   maze/PGrid
   (locations [_]
     (apply concat
@@ -72,7 +72,7 @@
               new-grid (-> grid
                            (assoc-in loc1 (assoc fcell fside false))
                            (assoc-in loc2 (assoc bcell bside false)))]
-          (SquareArrayGrid. rows cols new-grid)))))
+          (RectangularGrid. rows cols new-grid)))))
 
   maze/PSquareGrid
   (rows [_] rows)
@@ -86,7 +86,7 @@
   maze/PAnnotateCells
   (annotate [_ loc data]
     (let [cell (get-in grid loc)]
-      (SquareArrayGrid. rows cols (assoc-in grid loc (merge cell data)))))
+      (RectangularGrid. rows cols (assoc-in grid loc (merge cell data)))))
   (annotation [_ loc key]
     (get-in grid (conj loc key)))
   (annotations [_ loc]
@@ -98,7 +98,7 @@
 (defn make-grid [rows cols]
   (letfn [(make-row [_]
             (mapv (fn [_]
-                    (->SquareArrayCell true true true true))
+                    (->RectangularCell true true true true))
                   (range cols)))]
     (let [grid (mapv make-row (range rows))]
-      (->SquareArrayGrid rows cols grid))))
+      (->RectangularGrid rows cols grid))))

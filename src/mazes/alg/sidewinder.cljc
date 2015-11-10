@@ -1,6 +1,6 @@
 (ns mazes.alg.sidewinder
   (:require [mazes.core :as maze :refer (in-grid? link linked? loc+ locations)]
-            [mazes.grids.square-array :as rect]))
+            [mazes.grids.rectangular :as rect]))
 
 (defn- opposite [offset] (mapv - offset))
 
