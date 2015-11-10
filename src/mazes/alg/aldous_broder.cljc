@@ -1,6 +1,6 @@
 (ns mazes.alg.aldous-broder
   (:require [mazes.core :as maze :refer (link locations neighbors)]
-            [mazes.util.visitor :refer (->Ununvisitor visit unvisited? count-unvisited)]))
+            [mazes.util.visitor :refer (make-ununvisitor visit unvisited? count-unvisited)]))
 
 (defn step [grid loc prev-loc visitor]
   (if (< 0 (count-unvisited visitor))
@@ -14,8 +14,7 @@
 (defn on
   "Uses the Aldous-Broder algorithm to generate a maze."
   [grid]
-  (let [all-locs (locations grid)]
-    (step grid
-          (rand-nth all-locs)
-          nil
-          (->Ununvisitor (set all-locs)))))
+  (step grid
+        (rand-nth (locations grid))
+        nil
+        (make-ununvisitor grid)))
