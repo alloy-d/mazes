@@ -24,7 +24,7 @@
 
   ITrackUnvisited
   (unvisited? [this loc]
-    ((complement visited?) this loc))
+    (not (visited? this loc)))
 
   IFilterNeighbors
   (visited-neighbors [this grid loc]
