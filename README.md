@@ -46,6 +46,17 @@ That'll give you something slightly (but only slightly) more impressive:
     |       |                               |
     +---+---+---+---+---+---+---+---+---+---+
 
+## Web Frontend
+
+If you want bigger, better-looking mazes with pretty colors,
+load up the Web frontend:
+
+    $ lein ring server 4000
+
+(Or, to hack on it, boot up `figwheel`.)
+
+    $ rlwrap lein figwheel
+
 ## License
 
 Copyright © 2015 Adam Lloyd
