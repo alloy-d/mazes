@@ -1,54 +1,38 @@
 (ns mazes.alg.wilsons
-  (:require [mazes.core :as maze]
+  (:require [mazes.core :as maze :refer (link locations neighbors)]
+            [mazes.util.visitor :refer (make-ununvisitor visit unvisited visited?)]
             [clojure.set :as set]))
 
-(defn visit-in [grid loc]
-  (let [cell (get-in grid loc)]
-    (assoc-in grid loc (assoc cell ::visited true))))
+(defn- link-path [grid path]
+  (if (< 1 (count path))
+    (let [passages (map (partial conj [])
+                        path
+                        (drop 1 path))]
+      (reduce (fn [grid [loc1 loc2]]
+                (link grid loc1 loc2))
+              grid passages))))
 
-(defn visited? [grid loc]
-  (get (get-in grid loc) ::visited))
+(defn- build-path
+  ([grid visitor]
+   (if (< 0 (count (unvisited visitor)))
+     (build-path grid visitor [(rand-nth (seq (unvisited visitor)))])
+     grid))
 
-(defn link-path-in [grid path]
-  (if (> (count path) 1)
-    (do ;(println "linking" path)
-        (let [[loc1 loc2] (take 2 path)
-              next-grid (maze/link grid loc1 loc2)]
-          (recur next-grid (rest path))))
-    grid))
+  ([grid visitor current-path]
+   (let [prev-loc (first current-path)
+         next-loc (rand-nth (neighbors grid prev-loc))]
+     (cond (some #(= next-loc %1) current-path)
+           (recur grid visitor (drop-while #(not (= %1 next-loc)) current-path))
 
-(defn build-path [grid unvisited visited current-path]
-  {:pre [(not (empty? visited))]}
+           (visited? visitor next-loc)
+           (build-path (link-path grid (cons next-loc current-path))
+                       (reduce visit visitor current-path))
 
-  (cond
-    (empty? unvisited)
-    grid
-
-    (empty? current-path)
-    (recur grid unvisited visited [(rand-nth (seq unvisited))])
-
-    :else
-    (let [prev-loc (first current-path)
-          next-loc (rand-nth (vals (maze/neighbors grid prev-loc)))]
-      (cond
-        (some #(= next-loc %1) current-path)
-        (let [truncated-path (vec (drop-while #(not (= %1 next-loc)) current-path))]
-          (recur grid unvisited visited truncated-path))
-
-        (contains? visited next-loc)
-        (let [grid (link-path-in grid (cons next-loc current-path))
-              visited (into visited current-path)
-              unvisited (set/difference unvisited (set current-path))]
-          (recur grid unvisited visited []))
-
-        :else
-        (recur grid unvisited visited (vec (cons next-loc current-path)))))))
+           :else
+           (recur grid visitor (cons next-loc current-path))))))
 
 (defn on [grid]
-  (let [locations (maze/locations grid)
-        unvisited (set locations)
-        initially-visited (rand-nth locations)]
+  (let [locs (locations grid)
+        initially-visited (rand-nth locs)]
     (build-path grid
-                (disj unvisited initially-visited)
-                (conj #{} initially-visited)
-                [])))
+                (visit (make-ununvisitor grid) initially-visited))))
