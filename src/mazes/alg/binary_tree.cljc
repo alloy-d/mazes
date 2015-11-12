@@ -32,3 +32,11 @@
 
 (defn stepwise [grid & opts]
   (stepseq grid (locations grid) opts))
+
+(def BinaryTree
+  (reify
+    maze/PGridModifier
+    (modify-grid [_ grid]
+      (on grid))
+    (modify-steps [_ grid]
+      (stepwise grid))))
