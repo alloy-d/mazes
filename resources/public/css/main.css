@@ -47,9 +47,9 @@ pre {
   border-color: currentColor;
   border-style: none;
   border-width: 0.1em;
-  height: 20px;
+  height: 50px;
   padding: 0;
-  width: 20px;
+  width: 50px;
 }
 .maze table td.west {
   border-left-style: solid;

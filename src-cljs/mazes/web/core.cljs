@@ -19,7 +19,7 @@
    [cljs.core.async :refer [poll! put! chan <! >!]]))
 
 (enable-console-print!)
-(def default-cell-size 20)
+(def default-cell-size 50)
 
 (def app-state (atom {:grid (grid/make-grid 20 40)}))
 
