@@ -30,6 +30,14 @@
   (rows [this] "Returns the number of rows in this grid.")
   (cols [this] "Returns the number of columns in this grid."))
 
+
+(defprotocol PGridModifier
+  "A protocol for things that operate on a grid."
+
+  (modify-grid [this grid] "Applies a modification, in full, to the grid.")
+  (modify-steps [this grid]
+    "Produces a sequence of grids representing each step taken in applying the full modification."))
+
 (defn loc+
   "Takes a location and an offset, and returns the result of
   applying the offset to the location."
