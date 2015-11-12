@@ -45,6 +45,7 @@
             (recur (rest steps)))
           (recur '()))))))
 
+(def modifier (maze/comp-modifiers sidewinder/Sidewinder (analysis/->DistanceCalculator [0 0])))
 (defn run-process-loop []
   (let [processed-grids (chan)
         base-grids (chan)
@@ -54,7 +55,7 @@
           (recur (<! processed-grids)))
         (om/update! (om/ref-cursor (om/root-cursor app-state)) :base-grids base-grids)
         (put! base-grids (grid/make-grid 20 40))
-        (produce-steps ticker sidewinder/Sidewinder base-grids processed-grids))))
+        (produce-steps ticker modifier base-grids processed-grids))))
 
 (defn dimensions [node]
   (let [bounds (.getBoundingClientRect node)]
