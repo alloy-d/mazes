@@ -1,4 +1,5 @@
 (ns mazes.web.core
+  (:require-macros [cljs.core.async.macros :refer [go go-loop]])
   (:require
    [mazes.core :as maze]
    [mazes.grids.rectangular :as grid :refer (make-grid)]
@@ -14,24 +15,51 @@
    [om.dom :as dom]
    [sablono.core :as html :refer-macros [html]]
    [dommy.core :as dommy :refer-macros [sel sel1]]
-   [clojure.string :as str]))
+   [clojure.string :as str]
+   [cljs.core.async :refer [poll! put! chan <! >!]]))
 
 (enable-console-print!)
 (def default-cell-size 20)
+
+(def app-state (atom {:grid (grid/make-grid 20 40)}))
+
+(defn clock
+  "Returns a channel that produces a value at a given interval."
+  ([]
+   (clock 30))
+
+  ([interval]
+   (let [ticks (chan)]
+     (js/setInterval #(put! ticks true) interval)
+     ticks)))
+
+(defn produce-steps [ticker modifier bases-in processed-out]
+  (go-loop [steps '()]
+    (if-let [new-base (poll! bases-in)]
+      (recur (maze/modify-steps modifier new-base))
+      (do
+        (<! ticker)
+        (if (seq steps)
+          (do
+            (>! processed-out (first steps))
+            (recur (rest steps)))
+          (recur '()))))))
+
+(defn run-process-loop []
+  (let [processed-grids (chan)
+        base-grids (chan)
+        ticker (clock)]
+    (do (go-loop [next-grid (<! processed-grids)]
+          (om/update! (om/ref-cursor (om/root-cursor app-state)) :grid next-grid)
+          (recur (<! processed-grids)))
+        (om/update! (om/ref-cursor (om/root-cursor app-state)) :base-grids base-grids)
+        (put! base-grids (grid/make-grid 20 40))
+        (produce-steps ticker sidewinder/Sidewinder base-grids processed-grids))))
 
 (defn dimensions [node]
   (let [bounds (.getBoundingClientRect node)]
     {:height (.-height bounds)
      :width (.-width bounds)}))
-
-(def get-maze
-  (memoize
-   (fn [height width gen-maze]
-     (let [grid (make-grid height width)]
-       (-> grid
-           gen-maze
-           (analysis/compute-distances [(rand-int height) (rand-int width)])
-           )))))
 
 (defn dumb-maze [data owner]
   (reify
@@ -50,16 +78,15 @@
     om/IRender
     (render [this]
       (let [{:keys [grid cell-size]} data
-            cells-high (maze/rows grid)
+            cells-high (maze/rows @grid)
             maze-height (* cells-high cell-size)]
-        (js/console.log (str "cells high: " cells-high))
         (dom/div #js {:style #js {:height "100%"}
                       :className "maze-canvas"}
          (dom/div
           #js {:style #js {:height maze-height}
                :className "maze"
                :dangerouslySetInnerHTML
-               #js {:__html (table/represent grid)}}))))))
+               #js {:__html (table/represent @grid)}}))))))
 
 (defn maze-world [data owner]
   (reify
@@ -73,6 +100,7 @@
 
     om/IDidMount
     (did-mount [this]
+      (run-process-loop)
       (let [node (om/get-node owner)
             resize (fn []
                      (let [{:keys [width height]} (dimensions node)
@@ -83,17 +111,20 @@
                                         (Math/floor (/ height cells-high)))
                            cell-size (if-let [size (apply min (filter identity [fit-width fit-height]))]
                                        size
-                                       default-cell-size)]
+                                       default-cell-size)
+                           final-cells-high (if cells-high
+                                              cells-high
+                                              (Math/floor (/ (- height 1) cell-size)))
+                           final-cells-wide (if cells-wide
+                                              cells-wide
+                                              (Math/floor (/ width cell-size)))]
                        (om/set-state! owner
                                       {:width width
                                        :height height
                                        :cell-size cell-size
-                                       :cells-wide (if cells-wide
-                                                     cells-wide
-                                                     (Math/floor (/ width cell-size)))
-                                       :cells-high (if cells-high
-                                                     cells-high
-                                                     (Math/floor (/ height cell-size)))})))]
+                                       :cells-wide final-cells-wide
+                                       :cells-high final-cells-high})
+                       (put! (get @data :base-grids) (grid/make-grid final-cells-high final-cells-wide))))]
         (do
           (resize)
           (dommy/listen! js/window :resize resize))))
@@ -101,9 +132,9 @@
     om/IRenderState
     (render-state [this {:keys [:height :width :cell-size :cells-high :cells-wide]}]
       (if (and cells-high cells-wide)
-        (let [maze (get-maze cells-high cells-wide rb/on)]
+        (let [maze (get data :grid)]
           (om/build dumb-maze {:grid maze :cell-size cell-size}))
         (html [:div])))))
 
-(om/root maze-world {}
+(om/root maze-world app-state
          {:target (sel1 "#maze")})
