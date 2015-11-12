@@ -30,7 +30,31 @@
     :else
     grid))
 
-(defn compute-distances [grid root-loc]
-  (visit (update-distance grid root-loc 0)
-         [root-loc]
-         '()))
+(defn- visit-seq [grid [current & remaining] next-locs]
+  (lazy-seq
+   (cond
+     current
+     (let [next-distance (+ 1 (distance grid current))
+           to-visit (unvisited-links grid current)
+           updated-grid (reduce #(update-distance %1 %2 next-distance)
+                                grid
+                                to-visit)]
+       (cons updated-grid (visit-seq updated-grid remaining (concat next-locs to-visit))))
+
+     (seq next-locs)
+     (visit-seq grid next-locs [])
+
+     :else
+     '())))
+
+(defn compute-distances [f grid root-loc]
+  (f (update-distance grid root-loc 0)
+     [root-loc]
+     '()))
+
+(defrecord DistanceCalculator [root-loc]
+  m/PGridModifier
+  (modify-grid [_ grid]
+    (compute-distances visit grid root-loc))
+  (modify-steps [_ grid]
+    (compute-distances visit-seq grid root-loc)))
