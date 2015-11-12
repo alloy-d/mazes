@@ -45,3 +45,27 @@
   {:pre (= (count loc) (count offset))}
 
   (mapv + loc offset))
+
+(defn comp-modifiers
+  "Takes a sequence of PGridModifiers and returns a PGridModifier
+  that applies them in sequence."
+
+  [& modifiers]
+  {:pre (< 0 (count modifiers))}
+  (reify
+    PGridModifier
+    (modify-grid [_ grid]
+      ((comp (map #(partial modify-grid %1) modifiers)) grid))
+
+    (modify-steps [_ grid]
+      (letfn [(send-next [[next-val & next-seq] generators]
+                (lazy-seq
+                 (cond (seq next-seq)
+                       (cons next-val (send-next next-seq generators))
+
+                       (empty? generators)
+                       '()
+
+                       :else
+                       (cons next-val (send-next ((first generators) next-val) (rest generators))))))]
+        (send-next [grid] (map #(partial modify-steps %1) modifiers))))))
