@@ -3,6 +3,7 @@
   :license {:name "BSD"}
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [org.clojure/clojurescript "1.7.48"]
+                 [org.clojure/core.async "0.2.371"]
                  [org.omcljs/om "0.9.0"]
                  [prismatic/dommy "1.1.0"]
                  [compojure "1.1.6"]
