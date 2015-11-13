@@ -21,7 +21,9 @@
 (enable-console-print!)
 (def default-cell-size 50)
 
-(def app-state (atom {:grid (grid/make-grid 20 40)}))
+(def app-state (atom {:grid (grid/make-grid 20 40)
+                      :current-cells-high 20
+                      :current-cells-wide 40}))
 
 (defn clock
   "Returns a channel that produces a value at a given interval."
@@ -36,16 +38,22 @@
 (defn produce-steps [ticker modifier bases-in processed-out]
   (go-loop [steps '()]
     (if-let [new-base (poll! bases-in)]
-      (recur (maze/modify-steps modifier new-base))
+      (recur (maze/modify-steps (modifier) new-base))
       (do
         (<! ticker)
         (if (seq steps)
           (do
             (>! processed-out (first steps))
             (recur (rest steps)))
-          (recur '()))))))
+          (recur (maze/modify-steps (modifier) (grid/make-grid (:current-cells-high @app-state)
+                                                               (:current-cells-wide @app-state)))))))))
 
-(def modifier (maze/comp-modifiers sidewinder/Sidewinder (analysis/->DistanceCalculator [0 0])))
+;;(def modifier (maze/comp-modifiers sidewinder/Sidewinder (analysis/->DistanceCalculator [0 0])))
+(defn modifier []
+  (maze/comp-modifiers sidewinder/Sidewinder
+                       (analysis/->DistanceCalculator [(- (:current-cells-high @app-state) 1)
+                                                       (- (:current-cells-wide @app-state) 1)])))
+
 (defn run-process-loop []
   (let [processed-grids (chan)
         base-grids (chan)
@@ -125,6 +133,8 @@
                                        :cell-size cell-size
                                        :cells-wide final-cells-wide
                                        :cells-high final-cells-high})
+                       (om/update! data [:current-cells-wide] final-cells-wide)
+                       (om/update! data [:current-cells-high] final-cells-high)
                        (put! (get @data :base-grids) (grid/make-grid final-cells-high final-cells-wide))))]
         (do
           (resize)
