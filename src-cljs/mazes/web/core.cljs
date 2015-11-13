@@ -28,12 +28,13 @@
 (defn clock
   "Returns a channel that produces a value at a given interval."
   ([]
-   (clock 30))
+   (clock 10))
 
   ([interval]
    (let [ticks (chan)]
      (js/setInterval #(put! ticks true) interval)
      ticks)))
+
 
 (defn produce-steps [ticker modifier bases-in processed-out]
   (go-loop [steps '()]
