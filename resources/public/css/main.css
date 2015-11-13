@@ -46,7 +46,7 @@ pre {
 .maze table td {
   border-color: currentColor;
   border-style: none;
-  border-width: 0.1em;
+  border-width: 0.2em;
   height: 50px;
   padding: 0;
   width: 50px;
