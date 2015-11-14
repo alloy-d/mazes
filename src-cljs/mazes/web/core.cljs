@@ -2,6 +2,7 @@
   (:require-macros [cljs.core.async.macros :refer [go go-loop]])
   (:require
    [mazes.core :as maze]
+   [mazes.web.components.grid :as grid-view]
    [mazes.grids.rectangular :as grid :refer (make-grid)]
    [mazes.repr.ascii :refer (string-for-grid)]
    [mazes.repr.html-table :as table]
@@ -28,7 +29,7 @@
 (defn clock
   "Returns a channel that produces a value at a given interval."
   ([]
-   (clock 10))
+   (clock 20))
 
   ([interval]
    (let [ticks (chan)]
@@ -70,33 +71,6 @@
   (let [bounds (.getBoundingClientRect node)]
     {:height (.-height bounds)
      :width (.-width bounds)}))
-
-(defn dumb-maze [data owner]
-  (reify
-    om/IDidMount
-    (did-mount [this]
-      (let [node (om/get-node owner)
-            bounds (.getBoundingClientRect node)
-            height (.-height bounds)
-            width (.-width bounds)]
-        (doto js/console
-          (.group "container size")
-          (.log "height" height)
-          (.log "width" width)
-          (.groupEnd "container size"))))
-
-    om/IRender
-    (render [this]
-      (let [{:keys [grid cell-size]} data
-            cells-high (maze/rows @grid)
-            maze-height (* cells-high cell-size)]
-        (dom/div #js {:style #js {:height "100%"}
-                      :className "maze-canvas"}
-         (dom/div
-          #js {:style #js {:height maze-height}
-               :className "maze"
-               :dangerouslySetInnerHTML
-               #js {:__html (table/represent @grid)}}))))))
 
 (defn maze-world [data owner]
   (reify
@@ -142,10 +116,10 @@
           (dommy/listen! js/window :resize resize))))
 
     om/IRenderState
-    (render-state [this {:keys [:height :width :cell-size :cells-high :cells-wide]}]
+    (render-state [this {:keys [:grid :height :width :cell-size :cells-high :cells-wide]}]
       (if (and cells-high cells-wide)
         (let [maze (get data :grid)]
-          (om/build dumb-maze {:grid maze :cell-size cell-size}))
+          (om/build grid-view/grid {:grid maze :cell-size cell-size}))
         (html [:div])))))
 
 (om/root maze-world app-state

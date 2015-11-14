@@ -11,7 +11,7 @@ html, body {
 }
 
 body {
-  background-color: black;
+  background-color: rgb(0, 0, 0);
   color: rgb(0, 128, 255);
   font-size: 100%;
 }
@@ -43,23 +43,7 @@ pre {
   border-collapse: collapse;
   margin: auto auto;
 }
+
 .maze table td {
-  border-color: currentColor;
-  border-style: none;
-  border-width: 0.2em;
-  height: 50px;
-  padding: 0;
-  width: 50px;
-}
-.maze table td.west {
-  border-left-style: solid;
-}
-.maze table td.east {
-  border-right-style: solid;
-}
-.maze table td.north {
-  border-top-style: solid;
-}
-.maze table td.south {
-  border-bottom-style: solid;
+  transition: background-color 1s ease-out, border-color 0.2s ease;
 }
